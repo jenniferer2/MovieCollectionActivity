@@ -163,31 +163,25 @@ public class MovieCollection
         System.out.println("Box office revenue: " + movie.getRevenue());
     }
 
-    private void searchCast()
-    {
-        ArrayList <String> cast = new ArrayList <String> ();
+    private void searchCast() {
+        ArrayList<String> cast = new ArrayList<String>();
         int index = 0;
         for (Movie m : movies) {
-           String s = m.getCast();
-           String w = s.substring (index, s.indexOf("|"));
-           w = w.toLowerCase();
-           index = w.length() + index;
-           cast.add(w);
-
-        }
-        for (int i = 0; i < cast.size(); i ++) {
-            String s = cast.get(i);
-            for (int j = i + 1; i < cast.size(); i ++) {
-                if (s.equals(cast.get(j))) {
-                    cast.remove(i);
-                    i--;
-
+            String s = m.getCast();
+            while (s.indexOf("|") != -1) {
+                String w = s.substring(0, s.indexOf("|"));
+                s = s.substring(w.length() + 1);
+                w = w.toLowerCase();
+                if (!cast.contains(w)) {
+                    cast.add(w);
                 }
-
             }
 
-
         }
+
+
+
+
         System.out.print("Enter an actor/actress :  ");
         String user = scanner.nextLine();
 
@@ -195,26 +189,76 @@ public class MovieCollection
         ArrayList<String> results = new ArrayList<String>();
 
         for (int i = 0; i < cast.size(); i ++) {
-            if (user.indexOf(cast.get(i)) != -1 ) {
+            if (cast.get(i).indexOf(user) != -1) {
                 results.add(cast.get(i));
             }
 
 
-        }
-    /*    ArrayList<String> rr = new ArrayList<String>();
-        String first = results.get(0);
-        for (int i = 1; i < results.size(); i ++) {
-            if (first.compareTo(results.get(i)) < 0) {
-                first = results.get(i);
 
+        }
+
+
+        String temp = "";
+        for (int i = 0; i < results.size(); i ++) {
+            for (int j = i + 1; j < results.size(); j++) {
+                if (results.get(i).compareTo(results.get(j)) > 0) {
+                    temp = results.get(i);
+                    results.set(i, results.get(j));
+                    results.set(j , temp);
+
+                }
             }
 
 
         }
-        */
+
+        for (int i = 0; i < results.size(); i++)
+        {
+            String name = results.get(i);
+
+            // this will print index 0 as choice 1 in the results list; better for user!
+            int choiceNum = i + 1;
+
+            System.out.println("" + choiceNum + ". " + name);
+        }
+        System.out.println("Which actor/actress like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        String selectedPerson = results.get(choice - 1);
+        ArrayList <Movie> mo = new ArrayList <Movie> ();
+        for (Movie m : movies) {
+            if (m.getCast().toLowerCase().indexOf(selectedPerson) != -1) {
+                mo.add(m);
+
+            }
+
+        }
+        sortResults(mo);
+
+        for (int i = 0; i < mo.size(); i++)
+        {
+            String title = mo.get(i).getTitle();
 
 
+            int choiceNum = i + 1;
 
+            System.out.println("" + choiceNum + ". " + title);
+        }
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choicee = scanner.nextInt();
+        scanner.nextLine();
+
+        Movie s = mo.get(choicee - 1);
+
+        displayMovieInfo(s);
+
+        System.out.println("\n ** Press Enter to Return to Main Menu **");
+        scanner.nextLine();
 
 
     }
@@ -275,6 +319,24 @@ public class MovieCollection
 
     private void listGenres()
     {
+        ArrayList<String> genres = new ArrayList<String>();
+        int index = 0;
+        for (Movie m : movies) {
+            String s = m.getGenres();
+            while (s.indexOf("|") != -1) {
+                String w = s.substring(0, s.indexOf("|"));
+                s = s.substring(w.length() + 1);
+                w = w.toLowerCase();
+                if (!genres.contains(w)) {
+                    genres.add(w);
+                }
+            }
+
+        }
+
+        
+
+
 
     }
 
